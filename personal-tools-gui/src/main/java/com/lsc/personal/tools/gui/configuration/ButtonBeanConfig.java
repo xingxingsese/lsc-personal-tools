@@ -23,4 +23,9 @@ public class ButtonBeanConfig {
     public JButton button02(){
         return   new MyButton("测试2",true);
     }
+
+    @Bean
+    public JButton button03(){
+        return   new MyButton("测试3",true);
+    }
 }

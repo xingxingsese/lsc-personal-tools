@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Map;
 
@@ -52,7 +53,9 @@ public class SwingArea extends JFrame implements ApplicationRunner {
         // 窗口大小
         setSize(SystemConstant.FRAME_WIDTH, SystemConstant.FRAME_HEIGHT);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 3代表EXIT_ON_CLOSE(在 JFrame 中定义)：使用 System exit 方法退出应用程序。仅在应用程序中使用。
+        // 3代表EXIT_ON_CLOSE(在 JFrame 中定义)：使用 System exit 方法退出应用程序。仅在应用程序中使用。
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         // 窗口设置到屏幕居中
         setLocationRelativeTo(null);
 
@@ -60,19 +63,71 @@ public class SwingArea extends JFrame implements ApplicationRunner {
         setResizable(false);
 
         //为内容面板设置布局管理器
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout());
+        Container container = getContentPane();
 
-        JPanel contentPane = new JPanel(new FlowLayout());
+        //默认为0，0；水平间距10，垂直间距5
+        container.setLayout(new BorderLayout(10,5));
 
-        // 添加按钮到面板
-        addAllButton(contentPane);
+        // 上: NORTH  下: SOUTH  左: WEST  右: EAST  中: CENTER
+        // 创建顶部容器
+        JPanel foundNorthPane = foundNorthPane();
+
+        // 添加顶部容器到主容器中
+        container.add(foundNorthPane,BorderLayout.NORTH);
+
+        // 创建底部容器
+        JPanel foundSouthPane = FoundSouthPane();
+
+        // 添加底部容器到主容器中
+        container.add(foundSouthPane,BorderLayout.SOUTH);
 
         // 面板添加窗口
-        setContentPane(contentPane);
+      //  setContentPane(contentPane);
 
         // 设置窗口可见
         setVisible(true);
         log.info("窗口加载完成");
+
+    }
+
+    /**
+     * 创建底部容器
+     * @return
+     */
+    private JPanel FoundSouthPane() {
+
+        JPanel southPane = new JPanel(new FlowLayout(FlowLayout.LEFT,8,8));
+
+        JTextArea textArea1 = new JTextArea("请输入内容",15,53);
+        textArea1.setLineWrap(true);    //设置文本域中的文本为自动换行
+        JTextArea textArea2 = new JTextArea("输出内容",15,53);
+        textArea2.setLineWrap(true);    //设置文本域中的文本为自动换行
+
+        // 当文件内容超出容器大小时会出现下拉条
+        JScrollPane scroll = new JScrollPane(textArea1);
+        // 当文件内容超出容器大小时会出现下拉条
+        JScrollPane scroll2 = new JScrollPane(textArea2);
+
+        southPane.add(scroll);
+        southPane.add(scroll2);
+
+        return southPane;
+
+    }
+
+    /**
+     * 创建顶部容器
+     * // 上: NORTH  下: SOUTH  左: WEST  右: EAST  中: CENTER
+     */
+    private JPanel foundNorthPane() {
+        // 顶部容器
+        JPanel NorthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
+        // 添加按钮到面板
+        addAllButton(NorthPane);
+
+        return NorthPane;
+
 
     }
 
